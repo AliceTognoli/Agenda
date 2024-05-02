@@ -1,10 +1,9 @@
 <?php
 
     include 'conexao.php';
-        //echo "<pre>";
-       // print_r($_SERVER);
-       // echo "</pre>";
-       // exit;
+       if (isset($_GET['acao']) && $_GET['acao'] == 'excluir'){
+        echo "EU QUERO DELETAR ALGUEM DO MEU SISTEMA";
+       }
 
 
 

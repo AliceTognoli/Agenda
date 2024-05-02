@@ -5,24 +5,26 @@ include 'conexao.php';
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda</title>
 </head>
+
 <body>
     <header>
         <h1>Agenda de Contatos</h1>
-        <nav> 
+        <nav>
             <ul>
-                <li><a href = "index.php" > Home </a></li>
-                <li><a href = "cadastrar.php" > Cadastro</a></li>
+                <li><a href="index.php"> Home </a></li>
+                <li><a href="cadastrar.php"> Cadastro</a></li>
             </ul>
         </nav>
     </header>
     <section>
         <h2>Lista de contato</h2>
-        <table border="1"> 
+        <table border="1">
             <thead>
                 <tr>
                     <td>ID</td>
@@ -35,8 +37,59 @@ include 'conexao.php';
                 </tr>
             </thead>
             <tbody>
-                
+
                 <?php
+                //Abrir conexao com o banco de dados 
+                $conexao = abrirBanco();
+
+                //Preparar a consulta SQL para selecionar os dados no BD
+                $query = "SELECT id, nome, sobrenome, nascimento, endereco, telefone
+                        FROM pessoas";
+
+                //Executar a query(o SQL no banco)
+
+                $result = $conexao->query($query);
+                //$registros = $result->fetch_assoc();
+                if ($result->num_rows > 0) {
+                    //tem registro no banco
+                    while ($registros = $result->fetch_assoc()) {
+                        // echo "<pre>";
+                        // print_r($registros);
+                        // echo "</pre>";
+                        // exit;
+                ?>
+                        <tr>
+                            <td><?= $registros['id']?></td>
+                            <td><?= $registros['nome']?></td>
+                            <td><?= $registros['sobrenome']?></td>
+                            <td><?= date ("d/m/Y", strtotime( $registros['nascimento']))?></td>
+                            <td><?= $registros['endereco']?></td>
+                            <td><?= $registros['telefone']?></td>
+                            <td> 
+                                <a href ="#"><button>Editar</button></a>
+                                <a href ="?acao=excluir&id<?= $registros['id']?>"
+                                onclick="return confirm('Tem certeza que deseja excluir?');">
+                                <button>Excluir</button></a>
+                            </td>
+
+                        </tr>
+                    <?php
+
+
+                    }
+                } else {
+                    ?>
+
+                    <tr>
+                        <td colspan='7'>Nenhum registro encontrado no banco de dados</td>
+                    </tr>
+                <?php
+
+                }
+
+                //Criar um laço de repetição para preencher a tabela 
+
+
                 ?>
 
             </tbody>
@@ -45,5 +98,5 @@ include 'conexao.php';
         </table>
     </section>
 </body>
-</html>
 
+</html>
